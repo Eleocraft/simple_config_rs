@@ -1,5 +1,5 @@
 [lib]
-proc_macro = true
+proc-macro = true
 
 [package]
 name = "config_macro"
