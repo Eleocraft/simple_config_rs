@@ -19,7 +19,7 @@ pub fn impl_config_macro(ast: &syn::DeriveInput) -> TokenStream {
             fn parse_config<'a>(mut values: impl Iterator<Item = &'a str>) -> Result<Self, String> {
                 match values.next().ok_or(format!("Missing enum value for {}", #name))? {
                     #( #variant_parser )*
-                    df => Err(format!("Invalid value for Enum {}: {}", #name, df))
+                    df => Err(format!("Invalid value: {}", df))
                 }
             }
         }
