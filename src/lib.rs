@@ -8,3 +8,7 @@ pub trait Config {
 pub trait ConfigEnum {
     fn parse_config<'a>(values: impl Iterator<Item = &'a str>) -> Result<Self, String> where Self: Sized;
 }
+
+pub trait ConfigCustom {
+    fn parse_config<'a>(values: impl Iterator<Item = &'a str>) -> Result<Self, String> where Self: Sized;
+}
