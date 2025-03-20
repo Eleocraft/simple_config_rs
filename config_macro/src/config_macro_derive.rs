@@ -24,7 +24,7 @@ pub fn impl_config_macro(ast: &syn::DeriveInput) -> TokenStream {
             },
             "f64" | "f32" | "u64" | "u32" | "i64" | "i32" => quote! {
                 #name => {
-                    self.min_frequency = values.next().ok_or("Missing min frequency")?.parse().map_err(|_| "could not parse min freq")?;
+                    self.#ident = values.next().ok_or(format!("Missing {}", #name))?.parse().map_err(|_| format!("could not parse {}", #name))?;
                 },
             },
             _ => quote! {
