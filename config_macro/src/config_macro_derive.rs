@@ -22,7 +22,7 @@ pub fn impl_config_macro(ast: &syn::DeriveInput) -> TokenStream {
                     self.#ident = String::from(values.next().ok_or(format!("Missing value for {}", #name))?);
                 },
             },
-            "f64" | "f32" | "u64" | "u32" | "i64" | "i32" => quote! {
+            "bool" | "f64" | "f32" | "u64" | "u32" | "i64" | "i32" => quote! {
                 #name => {
                     self.#ident = values.next().ok_or(format!("Missing {}", #name))?.parse().map_err(|_| format!("could not parse {}", #name))?;
                 },
