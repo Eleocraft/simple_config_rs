@@ -64,7 +64,7 @@ pub fn impl_config_macro(ast: &syn::DeriveInput) -> TokenStream {
                 Ok(())
             }
             fn get_help() -> String {
-                format!("List of arguments with their respective parameters: {}", [#( #field_help ),*].join("\n"))
+                format!("List of arguments with their respective parameters:\n{}", [#( #field_help ),*].join("\n"))
             }
         }
     }.into()
