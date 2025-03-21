@@ -14,7 +14,7 @@ pub fn impl_config_macro(ast: &syn::DeriveInput) -> TokenStream {
             #name => Ok(Self::#ident),
         }
     } else { panic!("fields must be units") }).collect();
-    let variant_names: Vec<_> = data_enum.variants.iter().map(|v| v.ident.to_string()).collect();
+    let params: String = data_enum.variants.iter().map(|v| format!("{}|", v.ident.to_string())).collect();
 
     quote! {
         impl ConfigType for #ident {
@@ -25,7 +25,7 @@ pub fn impl_config_macro(ast: &syn::DeriveInput) -> TokenStream {
                 }
             }
             fn get_params() -> &'static str {
-                stringify!(<|#(#variant_names|)*>)
+                #params
             }
         }
     }.into()

@@ -42,12 +42,13 @@ pub fn impl_config_macro(ast: &syn::DeriveInput) -> TokenStream {
         let ty = f.1.1.as_str();
         let ty_path = f.1.0;
         match ty {
-            "String" | "bool" | "f64" | "f32" | "u64" | "u32" | "i64" | "i32" => quote! {
-                stringify!(#name <#ty>)
+            "String" | "bool" | "f64" | "f32" | "u64" | "u32" | "i64" | "i32" => {
+                let help_str = format!("{} <{}>", name, ty);
+                quote!(#help_str)
             },
-            _ => quote! {
-                stringify!(#name, #ty_path::get_help());
-            },
+            _ => {
+                quote!(format!("{} <{}>", #name, #ty_path::get_help()))
+            }
         }
     }).collect();
 
