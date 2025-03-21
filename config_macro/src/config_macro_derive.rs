@@ -62,7 +62,7 @@ pub fn impl_config_macro(ast: &syn::DeriveInput) -> TokenStream {
                 }
                 Ok(())
             }
-            fn get_help() -> String {
+            fn get_help() -> &'static str {
                 stringifiy!(List of arguments with their respective parameters: #( #field_help )*)
             }
         }
