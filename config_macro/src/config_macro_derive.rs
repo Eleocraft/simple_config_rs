@@ -43,10 +43,10 @@ pub fn impl_config_macro(ast: &syn::DeriveInput) -> TokenStream {
         let ty_path = f.1.0;
         match ty {
             "String" | "bool" | "f64" | "f32" | "u64" | "u32" | "i64" | "i32" => quote! {
-                println!("{} {}", #name, #ty);
+                stringify!(#name <#ty>)
             },
             _ => quote! {
-                println!("{} {}", #name, #ty_path::get_help());
+                stringify!(#name, #ty_path::get_help());
             },
         }
     }).collect();
@@ -63,8 +63,7 @@ pub fn impl_config_macro(ast: &syn::DeriveInput) -> TokenStream {
                 Ok(())
             }
             fn get_help() -> String {
-                println!("List of arguments with their respective parameters:");
-                #( #field_help )*
+                stringifiy!(List of arguments with their respective parameters: #( #field_help )*)
             }
         }
     }.into()
