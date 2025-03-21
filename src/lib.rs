@@ -3,7 +3,7 @@ pub use config_macro::ConfigType;
 
 pub trait Config {
     fn add_source<'a>(&mut self, values: impl Iterator<Item = &'a str>) -> Result<(), String>;
-    fn get_help() -> &'static str;
+    fn get_help() -> String;
 }
 
 pub trait ConfigType {
