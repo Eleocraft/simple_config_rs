@@ -8,5 +8,5 @@ pub trait Config {
 
 pub trait ConfigType {
     fn parse_config<'a>(values: impl Iterator<Item = &'a str>) -> Result<Self, String> where Self: Sized;
-    fn get_params() -> &'static str;
+    fn get_params() -> String;
 }

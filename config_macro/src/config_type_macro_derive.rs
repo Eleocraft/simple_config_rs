@@ -24,7 +24,7 @@ pub fn impl_config_macro(ast: &syn::DeriveInput) -> TokenStream {
                     df => Err(format!("Invalid value for enum {}: {}", #name, df))
                 }
             }
-            fn get_params() -> &'static str {
+            fn get_params() -> String {
                 #params
             }
         }
