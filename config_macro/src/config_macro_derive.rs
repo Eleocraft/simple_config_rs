@@ -12,11 +12,12 @@ pub fn impl_config_macro(ast: &syn::DeriveInput) -> TokenStream {
         v.ident.as_ref().unwrap(),
         if let Type::Path(ref path) = v.ty { (path.path.to_token_stream(), path.path.segments.last().unwrap().ident.to_string()) } else { panic!("invalid type") })
     );
-    let field_parser: Vec<_> = fields.map(|f| {
+    let field_parser: Vec<_> = fields.clone().map(|f| {
         let ident = f.0;
         let name = ident.to_string();
+        let ty = f.1.1.as_str();
         let ty_path = f.1.0;
-        match f.1.1.as_str() { // pass just the last item in the type path to match
+        match ty { // pass just the last item in the type path to match
             "String" => quote! {
                 #name => {
                     self.#ident = String::from(values.next().ok_or(format!("Missing value for {}", #name))?);
@@ -35,6 +36,21 @@ pub fn impl_config_macro(ast: &syn::DeriveInput) -> TokenStream {
         }
     }).collect();
 
+    let field_help: Vec<_> = fields.map(|f| {
+        let ident = f.0;
+        let name = ident.to_string();
+        let ty = f.1.1.as_str();
+        let ty_path = f.1.0;
+        match ty {
+            "String" | "bool" | "f64" | "f32" | "u64" | "u32" | "i64" | "i32" => quote! {
+                println!("{} {}", #name, #ty);
+            },
+            _ => quote! {
+                println!("{} {}", #name, #ty_path::get_help());
+            },
+        }
+    }).collect();
+
     quote! {
         impl Config for #name {
             fn add_source<'a>(&mut self, mut values: impl Iterator<Item = &'a str>) -> Result<(), String> {
@@ -45,6 +61,10 @@ pub fn impl_config_macro(ast: &syn::DeriveInput) -> TokenStream {
                     }
                 }
                 Ok(())
+            }
+            fn get_help() -> String {
+                println!("List of arguments with their respective parameters:");
+                #( #field_help )*
             }
         }
     }.into()
