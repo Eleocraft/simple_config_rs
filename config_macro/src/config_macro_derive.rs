@@ -44,7 +44,7 @@ pub fn impl_config_macro(ast: &syn::DeriveInput) -> TokenStream {
         match ty {
             "String" | "bool" | "f64" | "f32" | "u64" | "u32" | "i64" | "i32" => {
                 let help_str = format!("{} <{}>", name, ty);
-                quote!(#help_str.into())
+                quote!(String::from(#help_str))
             },
             _ => {
                 quote!(format!("{} <{}>", #name, #ty_path::get_params()))
