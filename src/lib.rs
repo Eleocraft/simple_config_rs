@@ -21,7 +21,7 @@ pub trait Config {
             Ok(false)
         }
     }
-    fn parse_cli(&mut self) -> Result<bool, ParseErr> {
+    fn parse_cli(&mut self) -> Result<(), ParseErr> {
         let args: Vec<String> = std::env::args()
             .skip(1)
             .map(|string| string.replace("--", ""))
@@ -29,11 +29,11 @@ pub trait Config {
         if !args.is_empty() && args[0] == "help" {
             println!("help:");
             println!("{}", Self::get_help());
-            return Ok(true);
+            std::process::exit(0);
         }
         self.add_source(args.iter().map(|string| string.as_str()))
             .map_err(|_| ParseErr)?;
-        Ok(false)
+        Ok(())
     }
 }
 
