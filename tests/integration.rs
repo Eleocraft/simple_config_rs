@@ -1,6 +1,6 @@
 use simple_config::Config;
 use simple_config::ConfigType;
-
+use std::fs;
 
 #[derive(Config)]
 struct TestConfig {
@@ -52,6 +52,27 @@ impl ConfigType for TestCustomConfigStruct {
 #[test]
 fn test_parse() {
     let mut config = TestConfig::new();
+    fs::write("test.conf", "
+        custom_struct = 420\n \
+        string_value = 69\n \
+        int_value = 420\n \
+        custom_enum = ThirdValue\n \
+        custom_struct  = 42\n \
+    ").expect("could not write file");
+    let result = config.parse_file("test.conf").expect("could not parse");
+    assert!(result);
+    assert_eq!(config.int_value, 420);
+    assert_eq!(config.float_value, 42.0);
+    assert_eq!(config.string_value, "69");
+    assert_eq!(config.custom_enum, TestConfigEnum::ThirdValue);
+    assert_eq!(config.custom_struct.one_value, 42);
+    assert_eq!(config.custom_struct.other_value, 42.0 as f32 * 3.0);
+}
+
+
+#[test]
+fn test_parse_file() {
+    let mut config = TestConfig::new();
     let source = vec![
         "custom_struct", "420",
         "string_value", "69",
@@ -69,6 +90,7 @@ fn test_parse() {
     assert_eq!(config.custom_struct.one_value, 42);
     assert_eq!(config.custom_struct.other_value, 42.0 as f32 * 3.0);
 }
+
 
 #[test]
 fn test_help() {
