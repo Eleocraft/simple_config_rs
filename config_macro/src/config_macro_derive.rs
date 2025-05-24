@@ -35,7 +35,7 @@ fn get_parser(name: &Ident, path: &PathSegment) -> TokenStream {
                 let mut vector = Vec::new();
                 loop {
                     let value = values.next().ok_or(format!("Vector {} must end with a space followed by a ]", stringify!(#name)))?;
-                    println!("{}", value);
+
                     if value == "]" {
                         break vector;
                     }
